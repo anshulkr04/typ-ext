@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Typewriter Typer",
+  "version": "1.0",
+  "description": "Type text like a typewriter into any input field.",
+  "permissions": ["scripting", "activeTab"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

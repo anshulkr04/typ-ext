@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Typewriter Typer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="nav">
+    <button id="nav-home" class="active">Home</button>
+    <button id="nav-settings">Settings</button>
+  </div>
+
+  <div id="view-home" class="view">
+    <textarea id="text" placeholder="Enter your sentence..."></textarea>
+    <button id="start">Type in selected input</button>
+  </div>
+
+  <div id="view-settings" class="view hidden">
+    <label for="speed">Typing Speed (ms per character):</label>
+    <input type="number" id="speed" value="50" min="10" step="10" />
+    <small>Lower is faster</small>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
