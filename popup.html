@@ -2,24 +2,247 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Typewriter Typer</title>
+  <title>Typewriter Pro</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="header">
+    <div class="logo">
+      <svg class="typewriter-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M2 6h20v2H2V6zm0 4h20v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8zm4 2v1h1v-1H6zm2 0v1h1v-1H8zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm-12 2v1h1v-1H6zm2 0v1h1v-1H8zm2 0v1h8v-1h-8z"/>
+      </svg>
+      <span>Typewriter Pro</span>
+    </div>
+    <div class="status-indicator" id="status-indicator">
+      <span class="status-dot"></span>
+      <span class="status-text">Ready</span>
+    </div>
+  </div>
+
   <div class="nav">
-    <button id="nav-home" class="active">Home</button>
-    <button id="nav-settings">Settings</button>
+    <button id="nav-home" class="nav-btn active">
+      <span class="nav-icon">📝</span>
+      Home
+    </button>
+    <button id="nav-sequences" class="nav-btn">
+      <span class="nav-icon">🔄</span>
+      Sequences
+    </button>
+    <button id="nav-settings" class="nav-btn">
+      <span class="nav-icon">⚙️</span>
+      Settings
+    </button>
   </div>
 
+  <!-- Home View -->
   <div id="view-home" class="view">
-    <textarea id="text" placeholder="Enter your sentence..."></textarea>
-    <button id="start">Type in selected input</button>
+    <div class="input-section">
+      <div class="textarea-container">
+        <textarea id="text" placeholder="Enter your text to type..."></textarea>
+        <div class="textarea-tools">
+          <div class="text-stats">
+            <span id="char-count">0 chars</span>
+            <span class="separator">•</span>
+            <span id="word-count">0 words</span>
+          </div>
+          <button id="clear-text" class="tool-btn" title="Clear text">
+            <span>✕</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="primary-controls">
+        <button id="ready" class="primary-btn">
+          <span class="btn-icon">🎯</span>
+          Ready to Type
+        </button>
+        <button id="pause" class="secondary-btn" disabled>
+          <span class="btn-icon">⏸️</span>
+          Pause
+        </button>
+        <button id="stop" class="secondary-btn" disabled>
+          <span class="btn-icon">⏹️</span>
+          Stop
+        </button>
+      </div>
+      
+      <div class="ready-info" id="ready-info" style="display: none;">
+        <div class="ready-message">
+          <span class="ready-icon">✅</span>
+          <div class="ready-text">
+            <div class="ready-title">Ready to type!</div>
+            <div class="ready-subtitle">Press your hotkey to start typing</div>
+            <div class="ready-hotkey" id="ready-hotkey-display">Ctrl+Shift+T</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="progress-container" id="progress-container" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0 / 0 characters</div>
+      </div>
+    </div>
   </div>
 
+  <!-- Sequences View -->
+  <div id="view-sequences" class="view hidden">
+    <div class="sequence-builder">
+      <h3>Multi-Step Sequences</h3>
+      <div class="sequence-list" id="sequence-list">
+        <!-- Sequence items will be added here -->
+      </div>
+      
+      <div class="sequence-controls">
+        <button id="add-sequence-step" class="secondary-btn">
+          <span class="btn-icon">➕</span>
+          Add Step
+        </button>
+        <button id="run-sequence" class="primary-btn" disabled>
+          <span class="btn-icon">▶️</span>
+          Run Sequence
+        </button>
+        <button id="clear-sequence" class="secondary-btn">
+          <span class="btn-icon">🗑️</span>
+          Clear All
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings View -->
   <div id="view-settings" class="view hidden">
-    <label for="speed">Typing Speed (ms per character):</label>
-    <input type="number" id="speed" value="50" min="10" step="10" />
-    <small>Lower is faster</small>
+    <div class="settings-section">
+      <h3>Typing Speed</h3>
+      <div class="setting-item">
+        <label for="base-speed">Base Speed (ms per character):</label>
+        <input type="range" id="base-speed" min="10" max="200" value="50" class="slider">
+        <span id="base-speed-value" class="value-display">50ms</span>
+      </div>
+      
+      <div class="setting-item">
+        <label for="letter-speed">Letters Speed Modifier:</label>
+        <input type="range" id="letter-speed" min="0.5" max="2" step="0.1" value="1" class="slider">
+        <span id="letter-speed-value" class="value-display">1.0x</span>
+      </div>
+      
+      <div class="setting-item">
+        <label for="number-speed">Numbers Speed Modifier:</label>
+        <input type="range" id="number-speed" min="0.5" max="2" step="0.1" value="1.2" class="slider">
+        <span id="number-speed-value" class="value-display">1.2x</span>
+      </div>
+      
+      <div class="setting-item">
+        <label for="punctuation-speed">Punctuation Speed Modifier:</label>
+        <input type="range" id="punctuation-speed" min="0.5" max="3" step="0.1" value="1.5" class="slider">
+        <span id="punctuation-speed-value" class="value-display">1.5x</span>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Realistic Typing</h3>
+      <div class="setting-item">
+        <label class="checkbox-label">
+          <input type="checkbox" id="random-variations" checked>
+          <span class="checkmark"></span>
+          Random speed variations
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label class="checkbox-label">
+          <input type="checkbox" id="punctuation-pauses" checked>
+          <span class="checkmark"></span>
+          Pause at punctuation marks
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label class="checkbox-label">
+          <input type="checkbox" id="typing-mistakes">
+          <span class="checkmark"></span>
+          Include realistic mistakes
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label for="typing-pattern">Typing Pattern:</label>
+        <select id="typing-pattern" class="select-input">
+          <option value="smooth">Smooth (Touch Typing)</option>
+          <option value="hunt-peck">Hunt & Peck</option>
+          <option value="burst">Burst Mode</option>
+        </select>
+      </div>
+      
+      <div class="setting-item">
+        <label for="typing-mode">Typing Mode:</label>
+        <select id="typing-mode" class="select-input">
+          <option value="character">Character by Character</option>
+          <option value="word">Word by Word</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Hotkeys</h3>
+      <div class="setting-item">
+        <label for="hotkey-modifier">Hotkey Combination:</label>
+        <div class="hotkey-builder">
+          <select id="hotkey-modifier" class="select-input">
+            <option value="Ctrl+Shift">Ctrl + Shift</option>
+            <option value="Alt+Shift">Alt + Shift</option>
+          </select>
+          <span class="hotkey-plus">+</span>
+          <select id="hotkey-key" class="select-input">
+            <option value="T">T</option>
+            <option value="Y">Y</option>
+            <option value="U">U</option>
+            <option value="I">I</option>
+            <option value="O">O</option>
+            <option value="P">P</option>
+            <option value="H">H</option>
+            <option value="J">J</option>
+            <option value="K">K</option>
+            <option value="L">L</option>
+            <option value="N">N</option>
+            <option value="M">M</option>
+          </select>
+        </div>
+        <div class="hotkey-preview" id="hotkey-preview">Ctrl+Shift+T</div>
+      </div>
+      
+      <div class="setting-item">
+        <button id="test-hotkey" class="secondary-btn">
+          <span class="btn-icon">🧪</span>
+          Test Hotkey
+        </button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Instructions</h3>
+      <div class="instructions">
+        <div class="instruction-step">
+          <span class="step-number">1</span>
+          <span class="step-text">Enter your text in the Home tab</span>
+        </div>
+        <div class="instruction-step">
+          <span class="step-number">2</span>
+          <span class="step-text">Click "Ready to Type" button</span>
+        </div>
+        <div class="instruction-step">
+          <span class="step-number">3</span>
+          <span class="step-text">Focus any input field on the webpage</span>
+        </div>
+        <div class="instruction-step">
+          <span class="step-number">4</span>
+          <span class="step-text">Press your hotkey to start typing</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="popup.js"></script>
